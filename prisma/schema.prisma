@@ -157,3 +157,23 @@ model Message {
   isRead     Boolean  @default(false)
   createdAt  DateTime @default(now())
 }
+
+model Project {
+  id                   Int      @id @default(autoincrement())
+  slug                 String   @unique
+  title                String
+  description          String
+  category             String   // "OBRAS_PUBLICAS" or "OBRAS_PRIVADAS"
+  status               String   // "EM_ANDAMENTO" or "FINALIZADOS"
+  client               String
+  location             String
+  area                 String
+  duration             String
+  technologies         String   // Semi-colon separated: "BIM;Concreto"
+  mainImage            String
+  galleryImages        String   // Semi-colon separated image URLs
+  videoUrl             String?
+  completionPercentage Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}

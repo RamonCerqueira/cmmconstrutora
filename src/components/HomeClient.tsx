@@ -1,6 +1,6 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Shield,
   Award,
@@ -26,12 +26,21 @@ import {
   Briefcase,
   HelpCircle,
   Sparkles,
+  Calendar,
+  X,
+  Play,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import Counter from './Counter';
+import ProjectsShowcase from './ProjectsShowcase';
+import { Project } from '@/lib/projects-data';
 
-export default function HomeClient() {
+interface HomeClientProps {
+  initialProjects: Project[];
+}
+
+export default function HomeClient({ initialProjects }: HomeClientProps) {
   const [faqOpen, setFaqOpen] = useState<number | null>(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
@@ -360,6 +369,9 @@ export default function HomeClient() {
           </div>
         </div>
       </section>
+
+      {/* 5.5. Projetos Showcase Section */}
+      <ProjectsShowcase projects={initialProjects} />
 
       {/* 6. Processo de Trabalho Section */}
       <section className="py-24 bg-neutral-light overflow-hidden">
