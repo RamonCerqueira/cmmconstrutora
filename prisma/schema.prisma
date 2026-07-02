@@ -1,0 +1,157 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int           @id @default(autoincrement())
+  email            String        @unique
+  password         String
+  name             String
+  role             String        @default("CANDIDATE") // "CANDIDATE" or "ADMIN"
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  profile          Profile?
+  applications     Application[]
+  sentMessages     Message[]     @relation("SentMessages")
+  receivedMessages Message[]     @relation("ReceivedMessages")
+  auditLogs        AuditLog[]
+}
+
+model Profile {
+  id                Int          @id @default(autoincrement())
+  userId            Int          @unique
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cpf               String       @unique
+  rg                String?
+  birthDate         DateTime
+  gender            String?
+  maritalStatus     String?
+  phone             String
+  whatsapp          String?
+  photo             String?      // Base64 or local upload path
+  address           String
+  city              String
+  state             String
+  cep               String
+  salaryExpectation Float?
+  availability      String?      // "IMMEDIATE", "15_DAYS", "30_DAYS", "OTHER"
+  education         String       // "ENSINO_MEDIO", "TECNICO", "GRADUACAO", "POS_GRADUACAO", "MESTRADO", "DOUTORADO"
+  degree            String?      // e.g. "Engenharia Civil"
+  courses           String?      // Text notes/list
+  certifications    String?      // Text notes/list
+  crea              String?
+  cnh               String?      // e.g. "A", "B", "AB", "C", "D", "E"
+  hasVehicle        Boolean      @default(false)
+  desiredArea       String       // "ENGENHARIA", "ADMINISTRATIVO", "OBRAS_CAMPO", "OUTROS"
+  desiredRole       String
+  skills            String?      // Comma-separated list or notes
+  languages         String?      // Comma-separated list
+  linkedin          String?
+  portfolio         String?
+  resumeUrl         String?      // File path/URL to CV PDF
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  experiences       Experience[]
+  educations        Education[]
+}
+
+model Experience {
+  id          Int       @id @default(autoincrement())
+  profileId   Int
+  profile     Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  company     String
+  role        String
+  startDate   DateTime
+  endDate     DateTime?
+  isCurrent   Boolean   @default(false)
+  description String?
+}
+
+model Education {
+  id           Int       @id @default(autoincrement())
+  profileId    Int
+  profile      Profile   @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  institution  String
+  degree       String
+  fieldOfStudy String?
+  startDate    DateTime
+  endDate      DateTime?
+  isCurrent    Boolean   @default(false)
+}
+
+model Vacancy {
+  id                 Int           @id @default(autoincrement())
+  title              String
+  area               String        // "ENGENHARIA", "ADMINISTRATIVO", "OBRAS_CAMPO", "OUTROS"
+  city               String
+  state              String
+  modality           String        // "PRESENCIAL", "HIBRIDO", "REMOTO"
+  salary             Float?
+  benefits           String?
+  quantity           Int           @default(1)
+  requirements       String        // Text description
+  description        String
+  responsibilities   String?
+  minEducation       String?
+  minExperienceMonths Int          @default(0)
+  cnhRequired        String?
+  creaRequired       Boolean       @default(false)
+  deadline           DateTime?
+  isActive           Boolean       @default(true)
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+  applications       Application[]
+}
+
+model Application {
+  id          Int             @id @default(autoincrement())
+  candidateId Int
+  candidate   User            @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  vacancyId   Int
+  vacancy     Vacancy         @relation(fields: [vacancyId], references: [id], onDelete: Cascade)
+  status      String          @default("NOVO") // "NOVO", "TRIAGEM", "ANALISE", "ENTREVISTA", "TESTE", "APROVADO", "CONTRATADO", "BANCO_TALENTOS"
+  score       Float           @default(0.0)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  history     StatusHistory[]
+}
+
+model StatusHistory {
+  id            Int         @id @default(autoincrement())
+  applicationId Int
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  oldStatus     String
+  newStatus     String
+  changedBy     String
+  comment       String?
+  createdAt     DateTime    @default(now())
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  details   String
+  ipAddress String?
+  createdAt DateTime @default(now())
+}
+
+model Message {
+  id         Int      @id @default(autoincrement())
+  senderId   Int
+  sender     User     @relation("SentMessages", fields: [senderId], references: [id], onDelete: Cascade)
+  receiverId Int
+  receiver   User     @relation("ReceivedMessages", fields: [receiverId], references: [id], onDelete: Cascade)
+  content    String
+  isRead     Boolean  @default(false)
+  createdAt  DateTime @default(now())
+}
