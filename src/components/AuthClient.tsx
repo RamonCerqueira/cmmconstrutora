@@ -72,7 +72,7 @@ export default function AuthClient() {
       </div>
 
       {/* Form Panel (1/2 Screen on Desktop, Full Screen on Mobile) */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 relative z-10">
+      <div className="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 pt-28 lg:pt-12 relative z-10">
         <div className="w-full max-w-md bg-secondary/80 backdrop-blur-md p-8 sm:p-10 rounded-2xl border border-white/5 shadow-2xl space-y-8">
           <div className="text-center lg:text-left">
             <h1 className="text-3xl font-heading font-extrabold text-white">

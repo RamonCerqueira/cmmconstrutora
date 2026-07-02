@@ -25,10 +25,16 @@ export async function createVacancyAction(formData: FormData) {
     const minExperienceMonthsStr = formData.get('minExperienceMonths') as string;
     const cnhRequired = (formData.get('cnhRequired') as string) || null;
     const creaRequired = formData.get('creaRequired') === 'true';
+    
+    // Date fields
+    const startDateStr = formData.get('startDate') as string;
+    const deadlineStr = formData.get('deadline') as string;
 
     const salary = salaryStr ? parseFloat(salaryStr) : null;
     const quantity = quantityStr ? parseInt(quantityStr) : 1;
     const minExperienceMonths = minExperienceMonthsStr ? parseInt(minExperienceMonthsStr) : 0;
+    const startDate = startDateStr ? new Date(startDateStr) : null;
+    const deadline = deadlineStr ? new Date(deadlineStr) : null;
 
     await prisma.vacancy.create({
       data: {
@@ -47,6 +53,9 @@ export async function createVacancyAction(formData: FormData) {
         minExperienceMonths,
         cnhRequired,
         creaRequired,
+        startDate,
+        deadline,
+        isActive: true,
       },
     });
 
@@ -64,6 +73,80 @@ export async function createVacancyAction(formData: FormData) {
     return { success: true };
   } catch (error: any) {
     return { success: false, error: error.message || 'Erro ao criar vaga' };
+  }
+}
+
+// Update/Edit an existing Job Vacancy
+export async function updateVacancyAction(vacancyId: number, formData: FormData) {
+  const user = await getSessionUser();
+  if (!user || user.role !== 'ADMIN') return { success: false, error: 'Não autorizado' };
+
+  try {
+    const title = formData.get('title') as string;
+    const area = formData.get('area') as string;
+    const city = formData.get('city') as string;
+    const state = formData.get('state') as string;
+    const modality = formData.get('modality') as string;
+    const salaryStr = formData.get('salary') as string;
+    const benefits = (formData.get('benefits') as string) || null;
+    const quantityStr = formData.get('quantity') as string;
+    const requirements = formData.get('requirements') as string;
+    const description = formData.get('description') as string;
+    const responsibilities = (formData.get('responsibilities') as string) || null;
+    const minEducation = formData.get('minEducation') as string;
+    const minExperienceMonthsStr = formData.get('minExperienceMonths') as string;
+    const cnhRequired = (formData.get('cnhRequired') as string) || null;
+    const creaRequired = formData.get('creaRequired') === 'true';
+    
+    // Status and dates
+    const isActive = formData.get('isActive') === 'true';
+    const startDateStr = formData.get('startDate') as string;
+    const deadlineStr = formData.get('deadline') as string;
+
+    const salary = salaryStr ? parseFloat(salaryStr) : null;
+    const quantity = quantityStr ? parseInt(quantityStr) : 1;
+    const minExperienceMonths = minExperienceMonthsStr ? parseInt(minExperienceMonthsStr) : 0;
+    const startDate = startDateStr ? new Date(startDateStr) : null;
+    const deadline = deadlineStr ? new Date(deadlineStr) : null;
+
+    await prisma.vacancy.update({
+      where: { id: vacancyId },
+      data: {
+        title,
+        area,
+        city,
+        state,
+        modality,
+        salary,
+        benefits,
+        quantity,
+        requirements,
+        description,
+        responsibilities,
+        minEducation,
+        minExperienceMonths,
+        cnhRequired,
+        creaRequired,
+        isActive,
+        startDate,
+        deadline,
+      },
+    });
+
+    // Log action
+    await prisma.auditLog.create({
+      data: {
+        userId: user.userId,
+        action: 'UPDATE_VACANCY',
+        details: `Atualizou a vaga ID ${vacancyId}: ${title}`,
+      },
+    });
+
+    revalidatePath('/vagas');
+    revalidatePath('/dashboard/rh');
+    return { success: true };
+  } catch (error: any) {
+    return { success: false, error: error.message || 'Erro ao atualizar vaga' };
   }
 }
 

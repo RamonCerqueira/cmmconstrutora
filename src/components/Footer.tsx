@@ -30,7 +30,7 @@ export default function Footer() {
           <div className="flex flex-col space-y-6">
             <Link href="/" className="flex items-center gap-2">
               <img
-                src="/logo-Transparente.png"
+                src="/logoLOW_transparent.png"
                 alt="CMM Construtora"
                 className="h-10 sm:h-12 w-auto object-contain"
               />

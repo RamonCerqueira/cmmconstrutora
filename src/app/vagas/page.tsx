@@ -67,8 +67,25 @@ export default async function VagasPage() {
   await seedSampleVacancies();
 
   const user = await getSessionUser();
+  const now = new Date();
   const vacancies = await prisma.vacancy.findMany({
-    where: { isActive: true },
+    where: {
+      isActive: true,
+      AND: [
+        {
+          OR: [
+            { startDate: null },
+            { startDate: { lte: now } }
+          ]
+        },
+        {
+          OR: [
+            { deadline: null },
+            { deadline: { gte: now } }
+          ]
+        }
+      ]
+    },
     orderBy: { createdAt: 'desc' },
   });
 
@@ -78,11 +95,11 @@ export default async function VagasPage() {
       where: { candidateId: user.userId },
       select: { vacancyId: true },
     });
-    appliedVacancyIds = apps.map((a) => a.vacancyId);
+    appliedVacancyIds = apps.map((a: any) => a.vacancyId);
   }
 
   // Map to clean client structure containing serialized dates
-  const serializedVacancies = vacancies.map((v) => ({
+  const serializedVacancies = vacancies.map((v: any) => ({
     id: v.id,
     title: v.title,
     area: v.area,
@@ -98,7 +115,8 @@ export default async function VagasPage() {
     minExperienceMonths: v.minExperienceMonths,
     cnhRequired: v.cnhRequired,
     creaRequired: v.creaRequired,
-    deadline: v.deadline,
+    startDate: v.startDate ? v.startDate.toISOString().split('T')[0] : null,
+    deadline: v.deadline ? v.deadline.toISOString().split('T')[0] : null,
   }));
 
   return (

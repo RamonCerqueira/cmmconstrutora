@@ -73,6 +73,8 @@ export default async function RHDashboardPage() {
     cnhRequired: v.cnhRequired,
     creaRequired: v.creaRequired,
     isActive: v.isActive,
+    startDate: v.startDate ? v.startDate.toISOString().split('T')[0] : null,
+    deadline: v.deadline ? v.deadline.toISOString().split('T')[0] : null,
   }));
 
   const serializedApplications = applications.map((app: any) => ({

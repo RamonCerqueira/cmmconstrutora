@@ -6,7 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model User {
@@ -103,6 +105,7 @@ model Vacancy {
   minExperienceMonths Int          @default(0)
   cnhRequired        String?
   creaRequired       Boolean       @default(false)
+  startDate          DateTime?
   deadline           DateTime?
   isActive           Boolean       @default(true)
   createdAt          DateTime      @default(now())

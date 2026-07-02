@@ -33,18 +33,17 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          scrolled
-            ? 'bg-primary/95 backdrop-blur-md shadow-lg border-b border-white/5 py-4'
-            : 'bg-transparent py-6'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled
+          ? 'bg-primary/95 backdrop-blur-md shadow-lg border-b border-white/5 py-4'
+          : 'bg-transparent py-6'
+          }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
               <img
-                src="/logo-Transparente.png"
+                src="/logoLOW_transparent.png"
                 alt="CMM Construtora"
                 className="h-10 sm:h-12 w-auto object-contain"
               />
