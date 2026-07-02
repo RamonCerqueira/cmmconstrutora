@@ -1,26 +1,93 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary: #0F172A;
+  --color-secondary: #1F2937;
+  --color-accent: #C8A75B;
+  --color-accent-hover: #b8974a;
+  --color-neutral-light: #F8FAFC;
+  --color-dark-glass: rgba(15, 23, 42, 0.75);
+  
+  --font-sans: "Inter", var(--font-geist-sans), sans-serif;
+  --font-heading: "Manrope", var(--font-geist-sans), sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --primary: #0F172A;
+  --secondary: #1F2937;
+  --accent: #C8A75B;
+  --neutral-light: #F8FAFC;
+  scroll-behavior: smooth;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* Custom Scrollbar for Premium Feel */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+::-webkit-scrollbar-track {
+  background: #0F172A;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C8A75B;
+  border: 2px solid #0F172A;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #b8974a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--neutral-light);
+  color: #1F2937;
+  overflow-x: hidden;
+}
+
+/* Parallax Effect Classes */
+.parallax-bg {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+@media (max-width: 1024px) {
+  /* Disable fixed attachment on mobile/tablet for performance and compatibility */
+  .parallax-bg {
+    background-attachment: scroll;
+  }
+}
+
+/* Glassmorphism Classes */
+.glassmorphism {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.glassmorphism-light {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(15, 23, 42, 0.05);
+}
+
+/* Horizontal Timeline Progress Dot Pulse */
+@keyframes pulse-gold {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(200, 167, 91, 0.4);
+  }
+  50% {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 8px rgba(200, 167, 91, 0);
+  }
+}
+
+.timeline-pulse {
+  animation: pulse-gold 2s infinite;
 }
