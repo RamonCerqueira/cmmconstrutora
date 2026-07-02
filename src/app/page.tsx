@@ -1,6 +1,7 @@
 import HomeClient from '@/components/HomeClient';
 import { prisma } from '@/lib/prisma';
 import { seedSampleProjects } from '@/lib/projects-seed';
+import type { Project } from '@/lib/projects-data';
 
 export default async function Home() {
   // Dynamically seed projects if empty
@@ -11,7 +12,7 @@ export default async function Home() {
   });
 
   // Map to clean client format with split arrays
-  const serializedProjects = dbProjects.map((p) => ({
+  const serializedProjects: Project[] = dbProjects.map((p) => ({
     id: p.slug,
     dbId: p.id,
     title: p.title,
