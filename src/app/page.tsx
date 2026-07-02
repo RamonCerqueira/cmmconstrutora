@@ -25,7 +25,7 @@ export default async function Home() {
     technologies: p.technologies ? p.technologies.split(';') : [],
     mainImage: p.mainImage,
     galleryImages: p.galleryImages ? p.galleryImages.split(';') : [],
-    videoUrl: p.videoUrl,
+    videoUrl: p.videoUrl ?? undefined,
     completionPercentage: p.completionPercentage,
   }));
 

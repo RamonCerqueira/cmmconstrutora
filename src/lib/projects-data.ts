@@ -11,7 +11,7 @@ export interface Project {
   technologies: string[];
   mainImage: string;
   galleryImages: string[];
-  videoUrl?: string;
+  videoUrl?: string | null;
   completionPercentage: number;
 }
 
