@@ -379,9 +379,10 @@ export default function HomeClient({ initialProjects }: HomeClientProps) {
           <div className="text-center max-w-3xl mx-auto mb-20">
             <span className="text-accent font-sans text-sm tracking-widest uppercase font-bold block mb-2">
               Processo de Trabalho
-            <h2 className="text-3xl sm:text-4xl font-heading font-extrabold text-primary">
-              Planejamento e controle de ponta a ponta
-            </h2>
+
+              <h2 className="text-3xl sm:text-4xl font-heading font-extrabold text-primary">
+                Planejamento e controle de ponta a ponta
+              </h2>
             </span>
           </div>
 

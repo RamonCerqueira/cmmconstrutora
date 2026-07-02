@@ -2,10 +2,17 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { projects } from '@/lib/projects-data';
+// import { projects } from '@/lib/projects-data';
 import { MapPin, ArrowRight, X, Play, Calendar, Building, Layers, Award } from 'lucide-react';
+import { Project } from '@/lib/projects-data';
 
-export default function ProjectsShowcase() {
+
+interface ProjectsShowcaseProps {
+  projects: Project[];
+}
+export default function ProjectsShowcase({
+  projects,
+}: ProjectsShowcaseProps) {
   const [selectedProject, setSelectedProject] = useState<any | null>(null);
   const [activeProjectFilter, setActiveProjectFilter] = useState<'TODOS' | 'OBRAS_PUBLICAS' | 'OBRAS_PRIVADAS'>('TODOS');
   const [activePhotoIndex, setActivePhotoIndex] = useState(0);
@@ -50,11 +57,10 @@ export default function ProjectsShowcase() {
             <button
               key={f.value}
               onClick={() => setActiveProjectFilter(f.value as any)}
-              className={`px-6 py-3 rounded-full text-xs font-bold transition-all duration-300 ${
-                activeProjectFilter === f.value
+              className={`px-6 py-3 rounded-full text-xs font-bold transition-all duration-300 ${activeProjectFilter === f.value
                   ? 'bg-accent text-primary shadow-lg shadow-accent/20 border border-accent'
                   : 'bg-[#131B2E]/60 border border-white/5 text-gray-400 hover:text-white hover:bg-[#1e293b]/60'
-              }`}
+                }`}
             >
               {f.label}
             </button>
@@ -82,15 +88,14 @@ export default function ProjectsShowcase() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#0B0F19]/80 via-transparent to-transparent" />
-                  
+
                   <span className="absolute top-4 left-4 text-[9px] font-sans font-bold tracking-wider px-3 py-1 rounded-full bg-primary/90 text-accent border border-white/5 uppercase">
                     {p.category === 'OBRAS_PUBLICAS' ? 'Pública' : 'Privada'}
                   </span>
-                  <span className={`absolute top-4 right-4 text-[9px] font-sans font-bold tracking-wider px-3 py-1 rounded-full uppercase ${
-                    p.status === 'FINALIZADOS'
+                  <span className={`absolute top-4 right-4 text-[9px] font-sans font-bold tracking-wider px-3 py-1 rounded-full uppercase ${p.status === 'FINALIZADOS'
                       ? 'bg-green-600/90 text-white'
                       : 'bg-accent text-primary'
-                  }`}>
+                    }`}>
                     {p.status === 'FINALIZADOS' ? 'Concluída' : 'Em andamento'}
                   </span>
                 </div>
@@ -192,9 +197,8 @@ export default function ProjectsShowcase() {
                   <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
                     <button
                       onClick={() => setActivePhotoIndex(0)}
-                      className={`relative w-20 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
-                        activePhotoIndex === 0 ? 'border-accent scale-[1.02]' : 'border-transparent hover:border-gray-500'
-                      }`}
+                      className={`relative w-20 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${activePhotoIndex === 0 ? 'border-accent scale-[1.02]' : 'border-transparent hover:border-gray-500'
+                        }`}
                     >
                       <img src={selectedProject.mainImage} className="w-full h-full object-cover" />
                     </button>
@@ -202,9 +206,8 @@ export default function ProjectsShowcase() {
                       <button
                         key={idx}
                         onClick={() => setActivePhotoIndex(idx + 1)}
-                        className={`relative w-20 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${
-                          activePhotoIndex === idx + 1 ? 'border-accent scale-[1.02]' : 'border-transparent hover:border-gray-500'
-                        }`}
+                        className={`relative w-20 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all ${activePhotoIndex === idx + 1 ? 'border-accent scale-[1.02]' : 'border-transparent hover:border-gray-500'
+                          }`}
                       >
                         <img src={img} className="w-full h-full object-cover" />
                       </button>
